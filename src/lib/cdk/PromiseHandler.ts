@@ -33,7 +33,7 @@ export interface PromsieConfig<T, P> {
  * @param {PromsieConfig<T, P>} initConfig
  * @returns
  */
-export default function <T, P>(
+export function PromiseHandler<T, P>(
   target: PromiseGenerator<T, P>,
   initConfig: PromsieConfig<T, P>
 ) {
@@ -72,7 +72,7 @@ export default function <T, P>(
 
   onMounted(() => {
     if (!config.manual) {
-      run();
+      handlePromise();
     }
   });
 

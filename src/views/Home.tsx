@@ -1,14 +1,31 @@
-import { defineComponent, renderSlot } from "vue";
+import { defineComponent, ref, renderSlot, watch } from "vue";
 import { PromiseHandler } from "@/lib/cdk";
-const testChildren = defineComponent({
+const Test = defineComponent({
   name: "test",
-  setup(props, ctx) {
-    return () => <div>this is test{renderSlot(ctx.slots, "default")}</div>;
+  setup() {
+    const { data, loading, error, run } = PromiseHandler<Date, undefined>(
+      wait,
+      {
+        loop: true,
+        onSuccess: (res) => {
+          console.log(res);
+        },
+        manual: true,
+      }
+    );
+    run();
+    return () => (
+      <div>
+        {data.value?.toString()}
+        {loading.value + ""}
+        {error.value}
+      </div>
+    );
   },
 });
 
 const wait = () =>
-  new Promise((res) => {
+  new Promise<Date>((res) => {
     setTimeout(() => {
       res(new Date());
     }, 2000);
@@ -17,16 +34,7 @@ const wait = () =>
 export default defineComponent({
   name: "home",
   setup() {
-    const { data, loading, error } = PromiseHandler(wait, {
-      debounce: 300,
-      loop: true,
-    });
-    return () => (
-      <div>
-        {data}
-        {loading}
-        {error}
-      </div>
-    );
+    const show = ref(true);
+    return () => (show.value ? <Test /> : null);
   },
 });
