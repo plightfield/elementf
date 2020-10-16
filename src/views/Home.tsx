@@ -1,9 +1,8 @@
-import { defineComponent } from "vue";
-
+import { defineComponent, ref, renderSlot } from "vue";
 const testChildren = defineComponent({
   name: "test",
-  setup(props) {
-    return () => <div>this is test</div>;
+  setup(props, ctx) {
+    return () => <div>this is test{renderSlot(ctx.slots, "default")}</div>;
   },
 });
 
